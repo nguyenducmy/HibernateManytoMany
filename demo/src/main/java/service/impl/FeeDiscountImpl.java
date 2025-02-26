@@ -29,13 +29,15 @@ public class FeeDiscountImpl implements FeeDiscount {
             jsonObject.put("baseAmount", baseAmount);
             jsonObject.put("channelPaymentCode", feeDiscount.getChannelPaymentCode());
 
+
+
             if(feeDiscount.getFromValue() == null && feeDiscount.getToValue() != null && Double.valueOf(feeDiscount.getToValue()) <= Double.valueOf(baseAmount)) {
                 continue;
             }
             if(feeDiscount.getToValue() == null && feeDiscount.getFromValue() !=null  && Double.valueOf(feeDiscount.getFromValue()) >= Double.valueOf(baseAmount)) {
                 continue;
             }
-            if(feeDiscount.getMinValue() == null && feeDiscount.getToValue() != null && Double.valueOf(feeDiscount.getToValue()) <= Double.valueOf(feeDiscount.getValue())) {
+            if(feeDiscount.getMinValue() == null && feeDiscount.getToValue() != null && Double.valueOf(feeDiscount.getMinValue()) <= Double.valueOf(feeDiscount.getValue())) {
                 continue;
             }
             if(feeDiscount.getMaxValue() == null && feeDiscount.getMaxValue() != null && Double.valueOf(feeDiscount.getMaxValue()) >= Double.valueOf(feeDiscount.getValue())) {
@@ -70,11 +72,9 @@ public class FeeDiscountImpl implements FeeDiscount {
                 jsonObject.put("fee", feeDiscount.getType() == 0 ? feeDiscountVal : 0);
                 jsonObject.put("discount", feeDiscount.getType() == 0 ? 0 : feeDiscountVal);
                 jsonObject.put("amount", feeDiscount.getTypeFormula() == 1 ? Double.valueOf(baseAmount) + Double.valueOf(feeDiscountVal) : Double.valueOf(baseAmount) + Double.valueOf(baseAmount) * Double.valueOf(feeDiscountVal) / 100);
-
-            }else{
-                continue;
+                jsonArray.put(jsonObject);
             }
-            jsonArray.put(jsonObject);
+
         }
         return jsonArray;
     }
