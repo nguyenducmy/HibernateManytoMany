@@ -100,7 +100,6 @@ public class FeeDiscountImpl implements FeeDiscount {
         if (feeDiscount.getEndDate().before(new Date())) {
             return false;
         }
-
         return true;
     }
 
