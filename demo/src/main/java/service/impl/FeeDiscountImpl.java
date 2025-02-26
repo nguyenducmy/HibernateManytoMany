@@ -8,14 +8,15 @@ import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 import service.FeeDiscount;
 import utils.HibernateUtil;
 
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class FeeDiscountImpl implements FeeDiscount {
-
 
     @Override
     public  JSONArray getFeeAllChannelPayment(String partnerCode, String serviceCodeCol, String serviceProviderCodeCol, String baseAmount) {
@@ -45,20 +46,21 @@ public class FeeDiscountImpl implements FeeDiscount {
         List<ColFeeDiscount> feeDiscounts = getFeeDiscounts(partnerCode, serviceCodeCol, serviceProviderCodeCol, sql);
         ObjectFeeDb objectFeeDb = new ObjectFeeDb();
         Double feeDiscountTotal = 0.0;
-
+        Double amountTotal = 0.0;
         for (ColFeeDiscount feeDiscount : feeDiscounts) {
             String feeDiscountVal = "";
             if (checkCondition(feeDiscount, baseAmount)) {
                 feeDiscountVal = checkFeeDiscountVal(feeDiscount, baseAmount);
             }
             feeDiscountTotal = Double.valueOf(feeDiscountVal.isEmpty() ? "0.0" : feeDiscountVal) + feeDiscountTotal;
+//            amountTotal = amountTotal+  feeDiscount.getTypeFormula() == 1 ? Double.valueOf(baseAmount) + Double.valueOf(feeDiscountVal.isEmpty() ? "0.0" : feeDiscountVal) : Double.valueOf(baseAmount) + Double.valueOf(baseAmount) * Double.valueOf(feeDiscountVal.isEmpty() ? "0.0" : feeDiscountVal) / 100;
         }
-
         objectFeeDb.setBaseAmount(baseAmount);
         objectFeeDb.setChannelPaymentCode(channelPaymentCode);
+//        objectFeeDb.setAmount(String.valueOf(amountTotal+Double.valueOf(baseAmount)));
         objectFeeDb.setFee(type==0?String.valueOf(feeDiscountTotal):"0.0");
-        objectFeeDb.setDiscount(type == 0 ?"0.0":String.valueOf(feeDiscountTotal));
 
+        objectFeeDb.setDiscount(type == 0 ?"0.0":String.valueOf(feeDiscountTotal));
         return objectFeeDb;
     }
 
