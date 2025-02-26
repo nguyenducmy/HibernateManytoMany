@@ -15,17 +15,10 @@ import java.util.Date;
 import java.util.List;
 
 public class FeeDiscountImpl implements FeeDiscount {
-    public static void main(String[] args) {
-//        JSONArray jsonArray = getFeeAllChannelPayment("VNPTMONEY", "32", "FT24112001", "50000");
-//        System.out.printf("jsonArray = %s\n", jsonArray);
-//        ObjectFeeDb db = getFee("VNPTMONEY", "32", "FT24112001", "VNPTPAY", "50000", 0);
-//        System.out.printf(db.getFee());
 
-
-    }
 
     @Override
-    public JSONArray getFeeAllChannelPayment(String partnerCode, String serviceCodeCol, String serviceProviderCodeCol, String baseAmount) {
+    public  JSONArray getFeeAllChannelPayment(String partnerCode, String serviceCodeCol, String serviceProviderCodeCol, String baseAmount) {
         JSONArray jsonArray = new JSONArray();
         String sql = "SELECT * FROM SPF_COL_FEE_DISCOUNT_EU where PARTNER_CODE='" + partnerCode + "' AND SEVICE_CODE_COL='" + serviceCodeCol + "' AND SEVICE_PROVIDER_CODE_COL='" + serviceProviderCodeCol + "'";
         List<ColFeeDiscount> feeDiscounts = getFeeDiscounts(partnerCode, serviceCodeCol, serviceProviderCodeCol, sql);
@@ -52,6 +45,7 @@ public class FeeDiscountImpl implements FeeDiscount {
         List<ColFeeDiscount> feeDiscounts = getFeeDiscounts(partnerCode, serviceCodeCol, serviceProviderCodeCol, sql);
         ObjectFeeDb objectFeeDb = new ObjectFeeDb();
         Double feeDiscountTotal = 0.0;
+
         for (ColFeeDiscount feeDiscount : feeDiscounts) {
             String feeDiscountVal = "";
             if (checkCondition(feeDiscount, baseAmount)) {
@@ -59,10 +53,11 @@ public class FeeDiscountImpl implements FeeDiscount {
             }
             feeDiscountTotal = Double.valueOf(feeDiscountVal.isEmpty() ? "0.0" : feeDiscountVal) + feeDiscountTotal;
         }
+
         objectFeeDb.setBaseAmount(baseAmount);
         objectFeeDb.setChannelPaymentCode(channelPaymentCode);
-        objectFeeDb.setFee(String.valueOf(feeDiscountTotal));
-        objectFeeDb.setDiscount(String.valueOf(feeDiscountTotal));
+        objectFeeDb.setFee(type==0?String.valueOf(feeDiscountTotal):"0.0");
+        objectFeeDb.setDiscount(type == 0 ?"0.0":String.valueOf(feeDiscountTotal));
 
         return objectFeeDb;
     }
