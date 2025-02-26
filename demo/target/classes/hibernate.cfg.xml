@@ -4,11 +4,11 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
-    <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-    <property name="connection.url">jdbc:sqlserver://localhost:1433;databaseName=COMPOSITEKEY_HIBERNATE</property>
-    <property name="connection.username">MYNGUYEN</property>
-    <property name="connection.password">123456789</property>
+    <property name="dialect">org.hibernate.dialect.Oracle8iDialect</property>
+    <property name="connection.driver_class">oracle.jdbc.OracleDriver</property>
+    <property name="connection.url">jdbc:oracle:thin:@//10.144.13.154:1521/payment</property>
+    <property name="connection.username">web_api</property>
+    <property name="connection.password">webApi2023</property>
 
     <!-- JDBC connection pool (use the built-in) -->
     <property name="connection.pool_size">1</property>
@@ -32,13 +32,11 @@
     <!-- Echo all executed SQL to stdout -->
     <property name="show_sql">true</property>
 
-    <!-- Drop and re-create the database schema on startup -->
+
     <property name="hibernate.hbm2ddl.auto">update</property>
 
-    <mapping class="entities.Employee" />
-    <mapping class="entities.Project" />
-    <mapping class="entities.EmployeeProject" />
-    <!--<mapping class="fa.training.entities.ClazzVo" />-->
+    <mapping class="entities.ColFeeDiscount" />
+
 
   </session-factory>
 </hibernate-configuration>
