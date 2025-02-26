@@ -37,7 +37,7 @@ public class FeeDiscountImpl implements FeeDiscount {
             if(feeDiscount.getToValue() == null && feeDiscount.getFromValue() !=null  && Double.valueOf(feeDiscount.getFromValue()) >= Double.valueOf(baseAmount)) {
                 continue;
             }
-            if(feeDiscount.getMinValue() == null && feeDiscount.getToValue() != null && Double.valueOf(feeDiscount.getMinValue()) <= Double.valueOf(feeDiscount.getValue())) {
+            if(feeDiscount.getMinValue() == null && feeDiscount.getMinValue() != null && Double.valueOf(feeDiscount.getMinValue()) <= Double.valueOf(feeDiscount.getValue())) {
                 continue;
             }
             if(feeDiscount.getMaxValue() == null && feeDiscount.getMaxValue() != null && Double.valueOf(feeDiscount.getMaxValue()) >= Double.valueOf(feeDiscount.getValue())) {
