@@ -71,6 +71,8 @@ public class FeeDiscountImpl implements FeeDiscount {
                 jsonObject.put("discount", feeDiscount.getType() == 0 ? 0 : feeDiscountVal);
                 jsonObject.put("amount", feeDiscount.getTypeFormula() == 1 ? Double.valueOf(baseAmount) + Double.valueOf(feeDiscountVal) : Double.valueOf(baseAmount) + Double.valueOf(baseAmount) * Double.valueOf(feeDiscountVal) / 100);
 
+            }else{
+                continue;
             }
             jsonArray.put(jsonObject);
         }
