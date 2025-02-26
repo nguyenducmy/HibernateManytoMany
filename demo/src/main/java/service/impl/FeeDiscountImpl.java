@@ -52,11 +52,24 @@ public class FeeDiscountImpl implements FeeDiscount {
                 continue;
             }
 
-            if(  (feeDiscount.getFromValue() == null && feeDiscount.getToValue() == null) || feeDiscount.getFromValue() != null && feeDiscount.getToValue() != null && Integer.valueOf(feeDiscount.getFromValue()) < Integer.valueOf(baseAmount) && Integer.valueOf(feeDiscount.getToValue()) > Integer.valueOf(baseAmount)
-            && (feeDiscount.getMinValue() == null && feeDiscount.getMaxValue() == null) || feeDiscount.getMinValue() != null && feeDiscount.getMaxValue() != null && Integer.valueOf(feeDiscount.getMinValue()) < Integer.valueOf(feeDiscount.getValue()) && Integer.valueOf(feeDiscount.getMaxValue()) > Integer.valueOf(feeDiscount.getValue())) {
-                jsonObject.put("fee", feeDiscount.getType() == 0 ? feeDiscount.getValue() : 0);
-                jsonObject.put("discount", feeDiscount.getType() == 0 ? 0 : feeDiscount.getValue());
-                jsonObject.put("amount", feeDiscount.getTypeFormula() == 1 ? Double.valueOf(baseAmount) + Double.valueOf(feeDiscount.getValue()) : Double.valueOf(baseAmount) + Double.valueOf(baseAmount) * Double.valueOf(feeDiscount.getValue()) / 100);
+            if(  (feeDiscount.getFromValue() == null && feeDiscount.getToValue() == null) || feeDiscount.getFromValue() != null && feeDiscount.getToValue() != null && Integer.valueOf(feeDiscount.getFromValue()) < Integer.valueOf(baseAmount) && Integer.valueOf(feeDiscount.getToValue()) > Integer.valueOf(baseAmount)) {
+                String feeDiscountVal = "";
+
+                if(Double.valueOf(feeDiscount.getValue()) < Double.valueOf(feeDiscount.getMinValue())){
+                        feeDiscountVal = feeDiscount.getMinValue();
+
+                }
+                if(Double.valueOf(feeDiscount.getValue()) > Double.valueOf(feeDiscount.getMaxValue())){
+                    feeDiscountVal = feeDiscount.getMaxValue();
+
+                }
+                if(Double.valueOf(feeDiscount.getMinValue()) <= Double.valueOf(feeDiscount.getValue()) && Double.valueOf(feeDiscount.getMaxValue()) >= Double.valueOf(feeDiscount.getValue())){
+                    feeDiscountVal = feeDiscount.getValue();
+                }
+
+                jsonObject.put("fee", feeDiscount.getType() == 0 ? feeDiscountVal : 0);
+                jsonObject.put("discount", feeDiscount.getType() == 0 ? 0 : feeDiscountVal);
+                jsonObject.put("amount", feeDiscount.getTypeFormula() == 1 ? Double.valueOf(baseAmount) + Double.valueOf(feeDiscountVal) : Double.valueOf(baseAmount) + Double.valueOf(baseAmount) * Double.valueOf(feeDiscountVal) / 100);
 
             }
             jsonArray.put(jsonObject);
