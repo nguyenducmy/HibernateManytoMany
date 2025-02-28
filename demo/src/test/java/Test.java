@@ -33,13 +33,7 @@ public class Test {
     @org.junit.Test
     public void testgetFee(){
         ObjectFeeDb actual =  feeDiscount.getFee("VNPTMONEY", "32", "FT24112001", "VNPTPAY", "50000", 0);
-        ObjectFeeDb expected =  ObjectFeeDb.builder()
-                .baseAmount("50000")
-                .channelPaymentCode("VNPTPAY")
-                .amount("50000.0")
-                .fee("1000.0")
-                .discount("0.0")
-                .build();
+        ObjectFeeDb expected =  new ObjectFeeDb();
         System.out.printf(actual.toString());
 
     }

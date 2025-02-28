@@ -13,7 +13,7 @@ public class App {
         // test case
         JSONArray jsonArray =  feeDiscount.getFeeAllChannelPayment("VNPTMONEY", "32", "FT24112001", "50000");
         ObjectFeeDb db = feeDiscount.getFee("VNPTMONEY", "32", "FT24112001", "VNPTPAY", "50000", 0);
-        System.out.printf(db.getFee());
+        System.out.printf("");
     }
 
 }
