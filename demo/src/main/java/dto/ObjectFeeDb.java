@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ObjectFeeDb{
-     private String baseAmount;
+     private Double baseAmount;
      private String channelPaymentCode;
-     private String amount;
-     private String fee;
-     private String discount;
+     private Double amount;
+     private Double fee;
+     private Double discount;
 
 }

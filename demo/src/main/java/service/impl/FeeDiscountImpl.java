@@ -33,14 +33,11 @@ public class FeeDiscountImpl implements FeeDiscount {
                 String feeDiscountVal = checkFeeDiscountVal(feeDiscount, baseAmount);
                 jsonObject.put("fee", feeDiscount.getType() == 0 ? feeDiscountVal : 0);
                 jsonObject.put("discount", feeDiscount.getType() == 0 ? 0 : feeDiscountVal);
-                if(feeDiscount.getType() == 0){
-                    amount = feeDiscount.getTypeFormula() == 1 ? Double.valueOf(baseAmount) + Double.valueOf(feeDiscountVal) : Double.valueOf(baseAmount) + Double.valueOf(baseAmount) * Double.valueOf(feeDiscountVal) / 100;
-                }else{
-                    amount = feeDiscount.getTypeFormula() == 1 ? Double.valueOf(baseAmount) - Double.valueOf(feeDiscountVal) : Double.valueOf(baseAmount) - Double.valueOf(baseAmount) * Double.valueOf(feeDiscountVal) / 100;
-                }
+                amount = feeDiscount.getType() == 0 ? Double.valueOf(baseAmount) + feeDiscountTypeFomula(feeDiscount.getTypeFormula(), feeDiscountVal, baseAmount) : Double.valueOf(baseAmount) - feeDiscountTypeFomula(feeDiscount.getTypeFormula(), feeDiscountVal, baseAmount);
                 jsonObject.put("amount", amount);
+                jsonArray.put(jsonObject);
             }
-            jsonArray.put(jsonObject);
+
         }
         return jsonArray;
     }
@@ -57,19 +54,15 @@ public class FeeDiscountImpl implements FeeDiscount {
             if (checkCondition(feeDiscount, baseAmount)) {
                 feeDiscountVal = checkFeeDiscountVal(feeDiscount, baseAmount);
             }
-            feeDiscountTotal = Double.valueOf(feeDiscountVal.isEmpty() ? "0.0" : feeDiscountVal) + feeDiscountTotal;
+            feeDiscountTotal = Double.valueOf(feeDiscountVal.isEmpty() ? 0.0 : feeDiscountTypeFomula(feeDiscount.getTypeFormula(), feeDiscountVal, baseAmount)) + feeDiscountTotal;
 
         }
-        if(feeDiscount.getType() == 0){
-            amount = feeDiscount.getTypeFormula() == 1 ? Double.valueOf(baseAmount) + Double.valueOf(feeDiscountVal) : Double.valueOf(baseAmount) + Double.valueOf(baseAmount) * Double.valueOf(feeDiscountVal) / 100;
-        }else{
-            amount = feeDiscount.getTypeFormula() == 1 ? Double.valueOf(baseAmount) - Double.valueOf(feeDiscountVal) : Double.valueOf(baseAmount) - Double.valueOf(baseAmount) * Double.valueOf(feeDiscountVal) / 100;
-        }
-        objectFeeDb.setBaseAmount(baseAmount);
+
+        objectFeeDb.setBaseAmount(Double.valueOf(baseAmount));
         objectFeeDb.setChannelPaymentCode(channelPaymentCode);
-        objectFeeDb.setAmount(String.valueOf(amountTotal+Double.valueOf(baseAmount)));
-        objectFeeDb.setFee(type==0?String.valueOf(feeDiscountTotal):"0.0");
-        objectFeeDb.setDiscount(type == 0 ?"0.0":String.valueOf(feeDiscountTotal));
+        objectFeeDb.setAmount(type==0?Double.valueOf(baseAmount) + feeDiscountTotal : Double.valueOf(baseAmount) - feeDiscountTotal);
+        objectFeeDb.setFee(type==0?feeDiscountTotal:0.0);
+        objectFeeDb.setDiscount(type == 0 ?0.0:feeDiscountTotal);
         return objectFeeDb;
     }
 
@@ -123,5 +116,8 @@ public class FeeDiscountImpl implements FeeDiscount {
             }
         }
         return feeDiscountVal;
+    }
+    public static Double feeDiscountTypeFomula(int typeFomula,  String value, String baseAmount) {
+        return typeFomula==1?Double.valueOf(value):Double.valueOf(baseAmount) * Double.valueOf(value) / 100;
     }
 }
